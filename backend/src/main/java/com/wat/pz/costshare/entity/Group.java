@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "group")
+@Table(name = "cost_group")
 public class Group {
 
     @Id
