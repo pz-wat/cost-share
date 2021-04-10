@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -34,5 +35,8 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
+
+    @OneToMany(mappedBy = "expense")
+    private Set<UserExpense> userExpenses;
 
 }

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,5 +21,11 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserGroup> userGroups;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserExpense> userExpenses;
 
 }

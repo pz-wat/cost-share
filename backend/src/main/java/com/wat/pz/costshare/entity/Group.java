@@ -34,4 +34,7 @@ public class Group {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
     private Set<Expense> expenses;
 
+    @OneToMany(mappedBy = "group")
+    private Set<UserGroup> userGroups;
+
 }
