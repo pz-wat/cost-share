@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -29,7 +29,7 @@ public class Group {
 
     @Column(name = "date_created")
     @CreationTimestamp
-    private Date dateCreated;
+    private LocalDate dateCreated;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
     private Set<Expense> expenses;
