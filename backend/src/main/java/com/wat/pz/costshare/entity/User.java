@@ -30,6 +30,7 @@ public class User {
 
     @NotBlank
     @Size(max = 120)
+    @Column(name = "password")
     private String password;
 
     @NotBlank
