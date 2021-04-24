@@ -1,14 +1,15 @@
 package com.wat.pz.costshare.controller;
 
-import com.wat.pz.costshare.dto.request.GroupJoinRequestDto;
 import com.wat.pz.costshare.dto.request.GroupPostRequestDto;
-import com.wat.pz.costshare.dto.response.GroupPostResponseDto;
+import com.wat.pz.costshare.dto.response.GroupResponseDto;
 import com.wat.pz.costshare.dto.response.MessageResponse;
 import com.wat.pz.costshare.service.GroupService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -20,20 +21,24 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping("/group/user/{userId}")
-    public ResponseEntity<?> getUserGroups(@PathVariable Long userId) {
-        return new ResponseEntity<>(groupService.findAllByUserId(userId), HttpStatus.OK);
+    @GetMapping("/group/{accessCode}")
+    public ResponseEntity<GroupResponseDto> getGroupByAccessCode(@PathVariable String accessCode) {
+        return new ResponseEntity<>(groupService.findGroupByAccessCode(accessCode), HttpStatus.OK);
     }
 
-    @PostMapping("/group/user")
-    public ResponseEntity<?> addUserToGroup(@RequestBody GroupJoinRequestDto groupJoinRequestDto) {
-        groupService.joinGroupWithAccessCode(groupJoinRequestDto.getUserId(), groupJoinRequestDto.getAccessCode());
-
-        return ResponseEntity.ok(new MessageResponse("User added to group successfully!"));
+    @GetMapping("/user/{userId}/group")
+    public ResponseEntity<List<GroupResponseDto>> getUserGroups(@PathVariable Long userId) {
+        return new ResponseEntity<>(groupService.findAllGroupsByUserId(userId), HttpStatus.OK);
     }
 
-    @PostMapping("/group")
-    public ResponseEntity<GroupPostResponseDto> postGroup(@RequestBody @Valid GroupPostRequestDto groupPostRequestDto) {
+    @PostMapping("/user/{userId}/group/{groupId}")
+    public ResponseEntity<MessageResponse> addUserToGroup(@PathVariable Long userId, @PathVariable Long groupId) {
+        groupService.addUserToGroup(userId, groupId);
+        return new ResponseEntity<>(new MessageResponse("User added to group successfully!"), HttpStatus.OK);
+    }
+
+    @PostMapping("/user/{userId}/group")
+    public ResponseEntity<GroupResponseDto> postGroup(@RequestBody @Valid GroupPostRequestDto groupPostRequestDto) {
         return new ResponseEntity<>(groupService.createGroup(groupPostRequestDto), HttpStatus.CREATED);
     }
 

@@ -1,8 +1,9 @@
 package com.wat.pz.costshare.service.impl;
 
 import com.wat.pz.costshare.dto.request.GroupPostRequestDto;
-import com.wat.pz.costshare.dto.response.GroupDto;
-import com.wat.pz.costshare.dto.response.GroupPostResponseDto;
+import com.wat.pz.costshare.dto.response.GroupExpense;
+import com.wat.pz.costshare.dto.response.GroupResponseDto;
+import com.wat.pz.costshare.dto.response.GroupUser;
 import com.wat.pz.costshare.entity.Group;
 import com.wat.pz.costshare.entity.User;
 import com.wat.pz.costshare.repository.GroupRepository;
@@ -29,7 +30,61 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public GroupPostResponseDto createGroup(GroupPostRequestDto groupPostRequestDto) {
+    public void addUserToGroup(Long userId, Long groupId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
+
+        group.addCommonUser(user);
+        groupRepository.save(group);
+    }
+
+    @Override
+    public GroupResponseDto findGroupByAccessCode(String accessCode) {
+        Group group = groupRepository.findByAccessCode(accessCode)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided access code does not exist!"));
+
+        return new GroupResponseDto(group.getId(), group.getName(), group.getAccessCode(), group.getDateCreated(),
+                false, getGroupExpenses(group), getGroupUsers(group));
+    }
+
+    @Override
+    @Transactional
+    public List<GroupResponseDto> findAllGroupsByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+
+        List<GroupResponseDto> groups = new ArrayList<>();
+        user.getUserGroups()
+        .forEach(ug -> {
+            Group group = ug.getGroup();
+            groups.add(new GroupResponseDto(group.getId(), group.getName(), group.getAccessCode(), group.getDateCreated(),
+                    ug.isAdmin(), getGroupExpenses(group), getGroupUsers(group)));
+        });
+
+        return groups;
+    }
+
+    private List<GroupExpense> getGroupExpenses(Group group) {
+        List<GroupExpense> groupExpenses = new ArrayList<>();
+        group.getExpenses()
+                .forEach(expense -> groupExpenses.add(new GroupExpense(expense.getId(),
+                        expense.getName(), expense.getDateCreated())));
+        return groupExpenses;
+    }
+
+    private List<GroupUser> getGroupUsers(Group group) {
+        List<GroupUser> groupUsers = new ArrayList<>();
+        group.getUserGroups()
+                .forEach(userGroup -> groupUsers.add(new GroupUser(userGroup.getUser().getId(),
+                        userGroup.getUser().getUsername())));
+        return groupUsers;
+    }
+
+    @Override
+    @Transactional
+    public GroupResponseDto createGroup(GroupPostRequestDto groupPostRequestDto) {
         User user = userRepository.findById(groupPostRequestDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
 
@@ -39,34 +94,9 @@ public class GroupServiceImpl implements GroupService {
         group.addAdminUser(user);
         groupRepository.save(group);
 
-        return new GroupPostResponseDto(group.getAccessCode());
+        return new GroupResponseDto(group.getId(), group.getName(), group.getAccessCode(),
+                group.getDateCreated(), true, List.of(), List.of());
     }
-
-    @Override
-    @Transactional
-    public void joinGroupWithAccessCode(Long userId, String accessCode) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
-        Group group = groupRepository.findByAccessCode(accessCode)
-                .orElseThrow(() -> new RuntimeException("Error: Group with the provided access code does not exist"));
-
-        group.addCommonUser(user);
-        groupRepository.save(group);
-    }
-
-    @Override
-    @Transactional
-    public List<GroupDto> findAllByUserId(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
-
-        List<GroupDto> groups = new ArrayList<>();
-        user.getUserGroups()
-        .forEach(ug -> groups.add(new GroupDto(ug.getGroup().getId(), ug.getGroup().getName())));
-
-        return groups;
-    }
-
 
     private String generateGroupAccessCode() {
         int leftLimit = 48; // numeral '0'

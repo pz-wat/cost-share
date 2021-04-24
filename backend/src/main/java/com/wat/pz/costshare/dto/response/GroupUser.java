@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GroupDto {
+public class GroupUser {
     private Long id;
-    private String name;
+    private String username;
 }

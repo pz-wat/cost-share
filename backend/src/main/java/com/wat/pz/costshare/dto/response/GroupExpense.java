@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class GroupDetailsResponseDto {
+public class GroupExpense {
     private Long id;
     private String name;
-    private String accessCode;
-    private Set<ExpenseDto> expenses;
+    private LocalDate date;
 }
