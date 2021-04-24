@@ -31,15 +31,20 @@ public class GroupController {
         return new ResponseEntity<>(groupService.findAllGroupsByUserId(userId), HttpStatus.OK);
     }
 
-    @PostMapping("/user/{userId}/group/{groupId}")
-    public ResponseEntity<MessageResponse> addUserToGroup(@PathVariable Long userId, @PathVariable Long groupId) {
-        groupService.addUserToGroup(userId, groupId);
-        return new ResponseEntity<>(new MessageResponse("User added to group successfully!"), HttpStatus.OK);
+    @GetMapping("/user/{userId}/group/{groupId}")
+    public ResponseEntity<GroupResponseDto> getGroupById(@PathVariable Long userId, @PathVariable Long groupId) {
+        return new ResponseEntity<>(groupService.findGroupById(userId, groupId), HttpStatus.OK);
     }
 
     @PostMapping("/user/{userId}/group")
     public ResponseEntity<GroupResponseDto> postGroup(@RequestBody @Valid GroupPostRequestDto groupPostRequestDto) {
         return new ResponseEntity<>(groupService.createGroup(groupPostRequestDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/user/{userId}/group/{groupId}")
+    public ResponseEntity<MessageResponse> addUserToGroup(@PathVariable Long userId, @PathVariable Long groupId) {
+        groupService.addUserToGroup(userId, groupId);
+        return new ResponseEntity<>(new MessageResponse("User added to group successfully!"), HttpStatus.OK);
     }
 
 }

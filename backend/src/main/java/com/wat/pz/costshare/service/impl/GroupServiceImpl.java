@@ -6,6 +6,7 @@ import com.wat.pz.costshare.dto.response.GroupResponseDto;
 import com.wat.pz.costshare.dto.response.GroupUser;
 import com.wat.pz.costshare.entity.Group;
 import com.wat.pz.costshare.entity.User;
+import com.wat.pz.costshare.entity.UserGroup;
 import com.wat.pz.costshare.repository.GroupRepository;
 import com.wat.pz.costshare.repository.UserRepository;
 import com.wat.pz.costshare.service.GroupService;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -38,6 +40,21 @@ public class GroupServiceImpl implements GroupService {
 
         group.addCommonUser(user);
         groupRepository.save(group);
+    }
+
+    @Override
+    public GroupResponseDto findGroupById(Long userId, Long groupId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
+
+        List<UserGroup> userGroups = user.getUserGroups().stream()
+                .filter(userGroup -> userGroup.getGroup().getId().equals(group.getId()))
+                .collect(Collectors.toList());
+
+        return new GroupResponseDto(group.getId(), group.getName(), group.getAccessCode(), group.getDateCreated(),
+                userGroups.get(0).isAdmin(), getGroupExpenses(group), getGroupUsers(group));
     }
 
     @Override

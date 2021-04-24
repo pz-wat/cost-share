@@ -13,4 +13,6 @@ public interface GroupService {
     List<GroupResponseDto> findAllGroupsByUserId(Long userId);
 
     void addUserToGroup(Long userId, Long groupId);
+
+    GroupResponseDto findGroupById(Long userId, Long groupId);
 }
