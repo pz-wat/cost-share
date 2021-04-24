@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity
@@ -50,6 +51,23 @@ public class Group {
         UserGroup userGroup = new UserGroup(user, this, isAdmin);
         userGroups.add(userGroup);
         user.getUserGroups().add(userGroup);
+    }
+
+    public boolean removeUser(User user) {
+        for (Iterator<UserGroup> iterator = userGroups.iterator();
+             iterator.hasNext(); ) {
+            UserGroup userGroup = iterator.next();
+
+            if (userGroup.getGroup().getId().equals(this.getId()) &&
+                    userGroup.getUser().getId().equals(user.getId())) {
+                iterator.remove();
+                userGroup.getUser().getUserGroups().remove(userGroup);
+                userGroup.setUser(null);
+                userGroup.setGroup(null);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

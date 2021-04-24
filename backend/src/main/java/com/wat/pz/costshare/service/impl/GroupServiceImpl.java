@@ -43,6 +43,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public GroupResponseDto findGroupById(Long userId, Long groupId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
@@ -58,6 +59,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public GroupResponseDto findGroupByAccessCode(String accessCode) {
         Group group = groupRepository.findByAccessCode(accessCode)
                 .orElseThrow(() -> new RuntimeException("Error: Group with the provided access code does not exist!"));
@@ -126,5 +128,26 @@ public class GroupServiceImpl implements GroupService {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    @Override
+    public void deleteGroup(Long groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
+        groupRepository.delete(group);
+    }
+
+    @Override
+    public void deleteUserFromGroup(Long userId, Long groupId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
+
+        boolean removedSuccessfully = group.removeUser(user);
+
+        if(!removedSuccessfully) {
+            throw new RuntimeException("Error: User with the provided id wasn't in the group");
+        }
     }
 }

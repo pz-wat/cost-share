@@ -44,7 +44,19 @@ public class GroupController {
     @PostMapping("/user/{userId}/group/{groupId}")
     public ResponseEntity<MessageResponse> addUserToGroup(@PathVariable Long userId, @PathVariable Long groupId) {
         groupService.addUserToGroup(userId, groupId);
-        return new ResponseEntity<>(new MessageResponse("User added to group successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("User added to group successfully!"), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/group/{groupId}")
+    public ResponseEntity<MessageResponse> deleteGroup(@PathVariable Long groupId) {
+        groupService.deleteGroup(groupId);
+        return new ResponseEntity<>(new MessageResponse("Group deleted successfully!"), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/{userId}/group/{groupId}")
+    public ResponseEntity<MessageResponse> deleteGroup(@PathVariable Long userId, @PathVariable Long groupId) {
+        groupService.deleteUserFromGroup(userId, groupId);
+        return new ResponseEntity<>(new MessageResponse("Group deleted successfully!"), HttpStatus.OK);
     }
 
 }
