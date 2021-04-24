@@ -1,7 +1,9 @@
 package com.wat.pz.costshare.controller;
 
+import com.wat.pz.costshare.dto.request.GroupJoinRequestDto;
 import com.wat.pz.costshare.dto.request.GroupPostRequestDto;
 import com.wat.pz.costshare.dto.response.GroupPostResponseDto;
+import com.wat.pz.costshare.dto.response.MessageResponse;
 import com.wat.pz.costshare.service.GroupService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,9 +20,16 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @GetMapping("/group/{userId}")
+    @GetMapping("/group/user/{userId}")
     public ResponseEntity<?> getUserGroups(@PathVariable Long userId) {
         return new ResponseEntity<>(groupService.findAllByUserId(userId), HttpStatus.OK);
+    }
+
+    @PostMapping("/group/user")
+    public ResponseEntity<?> addUserToGroup(@RequestBody GroupJoinRequestDto groupJoinRequestDto) {
+        groupService.joinGroupWithAccessCode(groupJoinRequestDto.getUserId(), groupJoinRequestDto.getAccessCode());
+
+        return ResponseEntity.ok(new MessageResponse("User added to group successfully!"));
     }
 
     @PostMapping("/group")

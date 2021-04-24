@@ -5,19 +5,15 @@ import com.wat.pz.costshare.dto.response.GroupDto;
 import com.wat.pz.costshare.dto.response.GroupPostResponseDto;
 import com.wat.pz.costshare.entity.Group;
 import com.wat.pz.costshare.entity.User;
-import com.wat.pz.costshare.entity.UserGroup;
 import com.wat.pz.costshare.repository.GroupRepository;
 import com.wat.pz.costshare.repository.UserRepository;
 import com.wat.pz.costshare.service.GroupService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -47,6 +43,19 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
+    public void joinGroupWithAccessCode(Long userId, String accessCode) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Group group = groupRepository.findByAccessCode(accessCode)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided access code does not exist"));
+
+        group.addCommonUser(user);
+        groupRepository.save(group);
+    }
+
+    @Override
+    @Transactional
     public List<GroupDto> findAllByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
@@ -57,6 +66,7 @@ public class GroupServiceImpl implements GroupService {
 
         return groups;
     }
+
 
     private String generateGroupAccessCode() {
         int leftLimit = 48; // numeral '0'

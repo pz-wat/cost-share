@@ -10,4 +10,6 @@ public interface GroupService {
     GroupPostResponseDto createGroup(GroupPostRequestDto groupPostRequestDto);
 
     List<GroupDto> findAllByUserId(Long userId);
+
+    void joinGroupWithAccessCode(Long userId, String accessCode);
 }
