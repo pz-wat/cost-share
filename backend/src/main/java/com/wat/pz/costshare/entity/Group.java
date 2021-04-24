@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,9 +33,23 @@ public class Group {
     private LocalDate dateCreated;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
-    private Set<Expense> expenses;
+    private Set<Expense> expenses = new HashSet<>();
 
-    @OneToMany(mappedBy = "group")
-    private Set<UserGroup> userGroups;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
+    private Set<UserGroup> userGroups = new HashSet<>();
+
+    public void addCommonUser(User user) {
+        addUser(user, false);
+    }
+
+    public void addAdminUser(User user) {
+        addUser(user, true);
+    }
+
+    private void addUser(User user, boolean isAdmin) {
+        UserGroup userGroup = new UserGroup(user, this, isAdmin);
+        userGroups.add(userGroup);
+        user.getUserGroups().add(userGroup);
+    }
 
 }

@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -37,6 +38,6 @@ public class Expense {
     private Group group;
 
     @OneToMany(mappedBy = "expense")
-    private Set<UserExpense> userExpenses;
+    private Set<UserExpense> userExpenses = new HashSet<>();
 
 }

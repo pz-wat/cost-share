@@ -16,17 +16,24 @@ public class UserGroup {
     @EmbeddedId
     private UserGroupKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("groupId")
     @JoinColumn(name = "group_id")
     private Group group;
 
     @Column(name = "admin")
     private boolean admin;
+
+    public UserGroup(User user, Group group, boolean admin) {
+        this.user = user;
+        this.group = group;
+        this.id = new UserGroupKey(user.getId(), group.getId());
+        this.admin = admin;
+    }
 
 }

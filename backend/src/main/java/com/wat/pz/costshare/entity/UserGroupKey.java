@@ -22,4 +22,9 @@ public class UserGroupKey implements Serializable  {
     @Column(name = "group_id")
     private Long groupId;
 
+    public UserGroupKey(Long userId, Long groupId) {
+        this.userId = userId;
+        this.groupId = groupId;
+    }
+
 }
