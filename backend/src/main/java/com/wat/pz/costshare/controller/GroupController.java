@@ -56,7 +56,7 @@ public class GroupController {
     @DeleteMapping("/user/{userId}/group/{groupId}")
     public ResponseEntity<MessageResponse> deleteGroup(@PathVariable Long userId, @PathVariable Long groupId) {
         groupService.deleteUserFromGroup(userId, groupId);
-        return new ResponseEntity<>(new MessageResponse("Group deleted successfully!"), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("User removed from group successfully!"), HttpStatus.OK);
     }
 
 }
