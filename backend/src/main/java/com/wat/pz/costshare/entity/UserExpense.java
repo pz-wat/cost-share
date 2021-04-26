@@ -26,6 +26,9 @@ public class UserExpense {
     @JoinColumn(name = "expense_id")
     private Expense expense;
 
+    @Column(name = "paid")
+    private boolean paid;
+
     @Column(name = "settled")
     private boolean settled;
 
