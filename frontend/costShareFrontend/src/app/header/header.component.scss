@@ -1,0 +1,39 @@
+.container {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid #222222;
+  background-color: rgba(whitesmoke, 0.01);
+}
+.title {
+  padding-left: 1em;
+  margin: auto;
+  font-size: 2em;
+  margin-left: 0;
+
+  cursor: pointer;
+}
+
+button {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  width: 7rem;
+}
+.button-container {
+  :last-child {
+    background-color: #272727;
+    margin-right: 2em;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  :not(:last-child) {
+    background-color: #1c2a35;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+button:hover {
+  color: white;
+  top: 0.1em;
+}
