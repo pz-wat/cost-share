@@ -23,6 +23,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './profile/profile.component';
+import { authInterceptorProviders } from './auth.interceptor';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +36,7 @@ import { ProfileComponent } from './profile/profile.component';
     ProfileComponent,
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -58,7 +61,7 @@ import { ProfileComponent } from './profile/profile.component';
     MatOptionModule,
     MatProgressSpinnerModule,
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

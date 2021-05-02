@@ -1,5 +1,6 @@
 mat-card {
-  max-width: 400px;
+  padding: 2em;
+  max-width: 20em;
   margin: 2rem auto;
   text-align: center;
 }
@@ -10,4 +11,13 @@ mat-form-field {
 a {
   color: blue;
   cursor: pointer;
+}
+img {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 10px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
 }

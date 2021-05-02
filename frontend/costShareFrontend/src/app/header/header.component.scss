@@ -6,20 +6,28 @@
   background-color: rgba(whitesmoke, 0.01);
 }
 .title {
-  padding-left: 1em;
+  padding: 0.8em;
   margin: auto;
   font-size: 2em;
   margin-left: 0;
-
   cursor: pointer;
 }
-
+.sign-out {
+  color: #d0d0d0;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 1em;
+  cursor: pointer;
+}
+.sign-out:hover {
+  color: #ffffff;
+}
 button {
-  margin-top: 1em;
-  margin-bottom: 1em;
   width: 7rem;
 }
 .button-container {
+  margin-top: auto;
+  margin-bottom: auto;
   :last-child {
     background-color: #272727;
     margin-right: 2em;
@@ -36,4 +44,5 @@ button {
 button:hover {
   color: white;
   top: 0.1em;
+  box-shadow: 0 4px 16px 0 rgb(#1c2a35, 40%);
 }

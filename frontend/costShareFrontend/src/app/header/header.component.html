@@ -2,7 +2,7 @@
   <div class="title" routerLink="/home" routerLinkActive="active">
     CostShare
   </div>
-  <div class="button-container">
+  <div class="button-container" *ngIf="!isLoggedIn">
     <button
       mat-raised-button
       color="primary"
@@ -17,7 +17,8 @@
       routerLink="/register"
       routerLinkActive="active"
     >
-      Sign in
+      Register
     </button>
   </div>
+  <a class="sign-out" (click)="signOut()" *ngIf="isLoggedIn">Sign Out</a>
 </div>

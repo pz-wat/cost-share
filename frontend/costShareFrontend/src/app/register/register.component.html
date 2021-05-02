@@ -1,7 +1,18 @@
 <mat-card>
   <mat-card-content>
-    <form>
-      <h2>Register</h2>
+    <h2>Register</h2>
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
+    />
+    <form
+      *ngIf="!isSuccessful"
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
       <mat-error *ngIf="signinInvalid">
         The username and password were not recognized
       </mat-error>
@@ -9,30 +20,54 @@
         <input
           matInput
           placeholder="Username"
-          formControlName="username"
+          type="text"
+          class="form-control"
+          name="username"
+          [(ngModel)]="form.username"
           required
+          minlength="3"
+          maxlength="20"
+          #username="ngModel"
         />
-        <mat-error> Please provide a valid email address </mat-error>
-      </mat-form-field>
-      <mat-form-field class="full-width-input">
-        <input matInput placeholder="Email" formControlName="email" required />
         <mat-error> Please provide a valid email address </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width-input">
         <input
           matInput
-          type="password"
-          placeholder="Password"
-          formControlName="password"
+          placeholder="E-mail"
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="form.email"
           required
+          email
+          #email="ngModel"
+        />
+        <mat-error> Please provide a valid email address </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width-input">
+        <input
+          matInput
+          placeholder="Password"
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="form.password"
+          required
+          minlength="6"
+          #password="ngModel"
         />
         <mat-error> Please provide a valid password</mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary">Create account</button>
+      <p>
+        Already have an account?
+        <a routerLink="/login" routerLinkActive="active">Log in</a>
+      </p>
     </form>
   </mat-card-content>
-  <p>
-    Already have an account?
-    <a routerLink="/login" routerLinkActive="active">Log in</a>
-  </p>
+
+  <div class="alert alert-success" *ngIf="isSuccessful">
+    Your registration is successful!
+  </div>
 </mat-card>
