@@ -22,6 +22,8 @@ mvnw.cmd spring-boot:run
 ```
 
 ### REST API Endpoints:
+
+#### Security
 1. http://localhost:8080/api/auth/signin
 - Body:
 ```
@@ -39,5 +41,82 @@ mvnw.cmd spring-boot:run
     "password": "jakieshaslo"
 }
 ```
+
+#### Groups
+
+Wszystkie sie tak zaczynaja: http://localhost:8080/api
+
+1. GET: /group/{accessCode}
+(Grupa po accessCode)
+- Response body:
+```
+{
+    "id": ,
+    "name": ,
+    "accessCode": ,
+    "date": ,
+    "isUserAdmin": ,
+    "groupExpenses": [
+    {
+     "id": ,
+     "name": ,
+     "date": 
+     }
+    ],
+    "groupUsers": [
+    {
+     "id": ,
+     "username": 
+     }
+    ],
+}
+```
+
+2. GET: /user/{userId}/group
+(Lista grup użytkownika userId)
+- Response body to lista tego co w punkcie 1
+
+3. GET: /user/{userId}/group/{groupId}
+(Konkretna grupa dla konkretnego użytkownika)
+- Response body takie jak w punkcie 1
+
+4. POST: /user/{userId}/group
+(Utworzenie nowej grupy dla której twórca {userId} automatycznie staje się adminem)
+- Request body
+```
+{
+    "userId": {userId},
+    "name": "nazwagrupy"
+}
+```
+- Response body takie jak w punkcie 1 (czyli szczegółny nowo utworzonej grupy)
+
+5. POST: /user/{userId}/group/{groupId}
+(Dodanie nowego użytkownika {userId} do konkretnej istniejącej grupy {groupId})
+- Response body
+```
+{
+   "message": "User added to group successfully!"
+}
+```
+
+6. DELETE: /user/{userId}/group/{groupId}
+(Usunięcie użytkownika {userId} z grupy {groupId})
+- Response body
+```
+{
+   "message": "User removed from group successfully!"
+}
+```
+
+7. DELETE: /group/{groupId}
+(Usunięcie grupy {groupId})
+- Response body
+```
+{
+   "message": "Group deleted successfully!"
+}
+```
+
 
 Jakby coś nie działało/pytania to piszcie
