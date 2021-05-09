@@ -44,6 +44,12 @@ mvnw.cmd spring-boot:run
 
 #### Groups
 
+Ogólnie grupy są oparte o accessCode, żeby się nie bawić w jakieś zaproszenia do znajomych itp.
+Czyli każda utworzona grupa ma unikalny accessCode, który przykładowo admin może skopiować i wsyłać do reszty na messengerze, dsc etc.
+Coś takiego jak na Teamsach jest.
+
+Czyli ktoś przykładowo dostaje accessCode. Wpisuje go -> klika dołącz do grupy -> bierzesz grupę z endpointu 1. -> dodajesz chłopa endpointem 5.
+
 Wszystkie sie tak zaczynaja: http://localhost:8080/api
 
 1. GET: /group/{accessCode}
