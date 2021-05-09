@@ -1,0 +1,53 @@
+<mat-card>
+  <mat-card-content
+    ><h2>Log In</h2>
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
+    />
+    <form
+      *ngIf="!isLoggedIn"
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <mat-form-field class="full-width-input">
+        <input
+          matInput
+          placeholder="Email"
+          type="text"
+          class="form-control"
+          name="username"
+          [(ngModel)]="form.username"
+          required
+          #username="ngModel"
+        />
+        <mat-error> Please provide a valid email address </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width-input">
+        <input
+          matInput
+          placeholder="Password"
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="form.password"
+          required
+          minlength="6"
+          #password="ngModel"
+        />
+        <mat-error> Please provide a valid password </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary">Log in</button>
+    </form>
+  </mat-card-content>
+  <p>
+    Don't have an account?
+    <a routerLink="/register" routerLinkActive="active">Register</a>
+  </p>
+  <div class="alert alert-success" *ngIf="isLoggedIn">
+    Logged in as {{ user }}.
+  </div>
+</mat-card>
