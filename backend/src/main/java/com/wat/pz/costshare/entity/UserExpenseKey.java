@@ -22,4 +22,9 @@ public class UserExpenseKey implements Serializable {
     @Column(name = "expense_id")
     private Long expenseId;
 
+    public UserExpenseKey(Long userId, Long expenseId) {
+        this.userId = userId;
+        this.expenseId = expenseId;
+    }
+
 }

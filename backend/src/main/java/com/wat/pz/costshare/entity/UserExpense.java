@@ -16,12 +16,12 @@ public class UserExpense {
     @EmbeddedId
     private UserExpenseKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("expenseId")
     @JoinColumn(name = "expense_id")
     private Expense expense;
@@ -32,4 +32,11 @@ public class UserExpense {
     @Column(name = "settled")
     private boolean settled;
 
+    public UserExpense(User user, Expense expense, boolean paid, boolean settled) {
+        this.id = new UserExpenseKey(user.getId(), expense.getId());
+        this.user = user;
+        this.expense = expense;
+        this.paid = paid;
+        this.settled = settled;
+    }
 }

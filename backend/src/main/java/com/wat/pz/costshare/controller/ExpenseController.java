@@ -1,5 +1,7 @@
 package com.wat.pz.costshare.controller;
 
+import com.wat.pz.costshare.dto.request.ExpensePostRequestDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,8 @@ public class ExpenseController {
     }
 
     @PostMapping("/group/{groupId}/user/{userId}/expense")
-    public ResponseEntity<?> postExpense(@PathVariable Long groupId, @PathVariable Long userId) {
+    public ResponseEntity<?> postExpense(@PathVariable Long groupId, @PathVariable Long userId,
+                                         @RequestBody @Valid ExpensePostRequestDto expenseDto) {
         return ResponseEntity.badRequest().build();
     }
 

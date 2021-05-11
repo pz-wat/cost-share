@@ -40,4 +40,22 @@ public class Expense {
     @OneToMany(mappedBy = "expense")
     private Set<UserExpense> userExpenses = new HashSet<>();
 
+    public void addGroup(Group group) {
+        this.setGroup(group);
+        group.getExpenses().add(this);
+    }
+
+    public void addOwner(User user) {
+        addUser(user, true, true);
+    }
+
+    public void addBorrowers(Set<User> borrowers) {
+        borrowers.forEach(borrower -> addUser(borrower, false, false));
+    }
+
+    private void addUser(User user, boolean paid, boolean settled) {
+        UserExpense userExpense = new UserExpense(user, this, paid, settled);
+        userExpenses.add(userExpense);
+        user.getUserExpenses().add(userExpense);
+    }
 }
