@@ -5,4 +5,6 @@ import com.wat.pz.costshare.dto.response.ExpenseResponseDto;
 
 public interface ExpenseService {
     ExpenseResponseDto createExpense(Long userId, Long groupId, ExpensePostRequestDto expenseDto);
+
+    ExpenseResponseDto findExpenseById(Long expenseId);
 }

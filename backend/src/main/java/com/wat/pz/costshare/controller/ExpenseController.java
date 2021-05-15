@@ -19,8 +19,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/expense/{expenseId}")
-    public ResponseEntity<?> getExpenseById(@PathVariable Long expenseId) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<ExpenseResponseDto> getExpenseById(@PathVariable Long expenseId) {
+        return new ResponseEntity<>(expenseService.findExpenseById(expenseId), HttpStatus.OK);
     }
 
     @GetMapping("/group/{groupId}/expense")

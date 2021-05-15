@@ -12,6 +12,7 @@ import com.wat.pz.costshare.repository.UserRepository;
 import com.wat.pz.costshare.service.ExpenseService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -33,6 +34,18 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    @Transactional
+    public ExpenseResponseDto findExpenseById(Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Error: Expense with the provided id does not exist!"));
+
+
+        return null;/* new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
+                expense.getDateCreated(), expense.getGroup().getId(), expenseUsers);*/
+    }
+
+    @Override
+    @Transactional
     public ExpenseResponseDto createExpense(Long userId, Long groupId, ExpensePostRequestDto expenseDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
