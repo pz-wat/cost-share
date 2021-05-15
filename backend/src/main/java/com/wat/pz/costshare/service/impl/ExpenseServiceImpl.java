@@ -39,9 +39,14 @@ public class ExpenseServiceImpl implements ExpenseService {
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(() -> new RuntimeException("Error: Expense with the provided id does not exist!"));
 
+        List<ExpenseUser> expenseUsers = new ArrayList<>();
+        expense.getUserExpenses()
+                .forEach(userExpense -> expenseUsers
+                        .add(new ExpenseUser(userExpense.getUser().getId(), userExpense.getUser().getUsername(),
+                                userExpense.getOwedAmount(), userExpense.isPaid(), userExpense.isSettled())));
 
-        return null;/* new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
-                expense.getDateCreated(), expense.getGroup().getId(), expenseUsers);*/
+        return  new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
+                expense.getDateCreated(), expense.getGroup().getId(), expenseUsers);
     }
 
     @Override
@@ -52,12 +57,11 @@ public class ExpenseServiceImpl implements ExpenseService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
 
-        Set<User> borrowers = new HashSet<>();
-
         List<ExpenseUser> expenseUsers = new ArrayList<>();
         expenseUsers
                 .add(new ExpenseUser(user.getId(), user.getUsername(), new BigDecimal("0.0"), true, true));
 
+        Set<User> borrowers = new HashSet<>();
         expenseDto.getUserIds().forEach(id -> {
             User tempUser = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
@@ -65,11 +69,14 @@ public class ExpenseServiceImpl implements ExpenseService {
         });
 
         BigDecimal userCount = new BigDecimal(borrowers.size());
-        BigDecimal amountPerUser = expenseDto.getAmount().divide(userCount, 2, RoundingMode.HALF_UP);
+        BigDecimal amountPerUser;
         if (borrowers.size() > 0) {
-            borrowers.forEach(borrower ->
-                    expenseUsers.add(new ExpenseUser(borrower.getId(), borrower.getUsername(), amountPerUser, false, false)));
+            amountPerUser = expenseDto.getAmount().divide(userCount, 2, RoundingMode.HALF_UP);
+        } else  {
+            amountPerUser = new BigDecimal("0.0");
         }
+        borrowers.forEach(borrower ->
+                expenseUsers.add(new ExpenseUser(borrower.getId(), borrower.getUsername(), amountPerUser, false, false)));
 
         Expense expense = new Expense();
         expense.setName(expenseDto.getName());
