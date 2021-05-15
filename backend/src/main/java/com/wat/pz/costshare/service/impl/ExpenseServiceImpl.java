@@ -51,10 +51,9 @@ public class ExpenseServiceImpl implements ExpenseService {
             borrowers.add(tempUser);
         });
 
-
         if (borrowers.size() > 0) {
             BigDecimal userCount = new BigDecimal(borrowers.size());
-            BigDecimal amountPerUser = expenseDto.getAmount().divide(userCount, 2, RoundingMode.HALF_EVEN);
+            BigDecimal amountPerUser = expenseDto.getAmount().divide(userCount, 2, RoundingMode.HALF_UP);
             borrowers.forEach(borrower ->
                     expenseUsers.add(new ExpenseUser(borrower.getId(), borrower.getUsername(), amountPerUser, false, false)));
         }
@@ -65,7 +64,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.addGroup(group);
         expense.addOwner(user);
         expense.addBorrowers(borrowers);
-
         expenseRepository.save(expense);
 
         return new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),

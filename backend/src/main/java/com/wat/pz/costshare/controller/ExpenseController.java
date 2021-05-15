@@ -1,13 +1,22 @@
 package com.wat.pz.costshare.controller;
 
 import com.wat.pz.costshare.dto.request.ExpensePostRequestDto;
+import com.wat.pz.costshare.dto.response.ExpenseResponseDto;
+import com.wat.pz.costshare.service.ExpenseService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class ExpenseController {
+
+    private final ExpenseService expenseService;
+
+    public ExpenseController(ExpenseService expenseService) {
+        this.expenseService = expenseService;
+    }
 
     @GetMapping("/expense/{expenseId}")
     public ResponseEntity<?> getExpenseById(@PathVariable Long expenseId) {
@@ -25,9 +34,9 @@ public class ExpenseController {
     }
 
     @PostMapping("/group/{groupId}/user/{userId}/expense")
-    public ResponseEntity<?> postExpense(@PathVariable Long groupId, @PathVariable Long userId,
-                                         @RequestBody @Valid ExpensePostRequestDto expenseDto) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<ExpenseResponseDto> postExpense(@PathVariable Long groupId, @PathVariable Long userId,
+                                                          @RequestBody @Valid ExpensePostRequestDto expenseDto) {
+        return new ResponseEntity<>(expenseService.createExpense(groupId, userId, expenseDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/expense/{expenseId}")
