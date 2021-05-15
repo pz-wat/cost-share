@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class ExpenseController {
@@ -24,8 +26,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/group/{groupId}/expense")
-    public ResponseEntity<?> getGroupExpenses(@PathVariable Long groupId) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<List<ExpenseResponseDto>> getGroupExpenses(@PathVariable Long groupId) {
+        return new ResponseEntity<>(expenseService.findAllExpensesByGroupId(groupId), HttpStatus.OK);
     }
 
     @GetMapping("/group/{groupId}/user/{userId}/expense")

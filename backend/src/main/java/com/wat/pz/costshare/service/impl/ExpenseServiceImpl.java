@@ -6,6 +6,7 @@ import com.wat.pz.costshare.dto.response.ExpenseUser;
 import com.wat.pz.costshare.entity.Expense;
 import com.wat.pz.costshare.entity.Group;
 import com.wat.pz.costshare.entity.User;
+import com.wat.pz.costshare.entity.UserExpense;
 import com.wat.pz.costshare.repository.ExpenseRepository;
 import com.wat.pz.costshare.repository.GroupRepository;
 import com.wat.pz.costshare.repository.UserRepository;
@@ -47,6 +48,24 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return  new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
                 expense.getDateCreated(), expense.getGroup().getId(), expenseUsers);
+    }
+
+    @Override
+    @Transactional
+    public List<ExpenseResponseDto> findAllExpensesByGroupId(Long groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
+
+        List<ExpenseResponseDto> expenses = new ArrayList<>();
+        group.getExpenses().forEach(expense -> {
+            List<ExpenseUser> expenseUsers = new ArrayList<>();
+            expense.getUserExpenses().forEach(userExpense -> expenseUsers.add(new ExpenseUser(userExpense.getUser().getId(),
+                    userExpense.getUser().getUsername(), userExpense.getOwedAmount(), userExpense.isPaid(), userExpense.isSettled())));
+            expenses.add(new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
+                    expense.getDateCreated(), expense.getGroup().getId(), expenseUsers));
+        });
+
+        return expenses;
     }
 
     @Override
