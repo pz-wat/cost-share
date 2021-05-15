@@ -68,7 +68,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             borrowers.add(tempUser);
         });
 
-        BigDecimal userCount = new BigDecimal(borrowers.size());
+        BigDecimal userCount = new BigDecimal((borrowers.size() + 1));
         BigDecimal amountPerUser;
         if (borrowers.size() > 0) {
             amountPerUser = expenseDto.getAmount().divide(userCount, 2, RoundingMode.HALF_UP);

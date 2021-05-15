@@ -37,7 +37,7 @@ public class Expense {
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
-    @OneToMany(mappedBy = "expense")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "expense")
     private Set<UserExpense> userExpenses = new HashSet<>();
 
     public void addGroup(Group group) {
