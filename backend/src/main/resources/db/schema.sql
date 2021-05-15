@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS user_group (
 CREATE TABLE IF NOT EXISTS user_expense (
   user_id BIGINT NOT NULL,
   expense_id BIGINT NOT NULL,
+  owed_amount DECIMAL(13,2) NULL DEFAULT NULL,
   paid BIT(1) DEFAULT 0,
   settled BIT(1) DEFAULT 0,
   PRIMARY KEY(user_id, expense_id),

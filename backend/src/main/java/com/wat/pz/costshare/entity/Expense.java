@@ -46,15 +46,15 @@ public class Expense {
     }
 
     public void addOwner(User user) {
-        addUser(user, true, true);
+        addUser(user, new BigDecimal("0.0"),true, true);
     }
 
-    public void addBorrowers(Set<User> borrowers) {
-        borrowers.forEach(borrower -> addUser(borrower, false, false));
+    public void addBorrowers(Set<User> borrowers, BigDecimal owedAmount) {
+        borrowers.forEach(borrower -> addUser(borrower, owedAmount, false, false));
     }
 
-    private void addUser(User user, boolean paid, boolean settled) {
-        UserExpense userExpense = new UserExpense(user, this, paid, settled);
+    private void addUser(User user, BigDecimal owedAmount, boolean paid, boolean settled) {
+        UserExpense userExpense = new UserExpense(user, this, owedAmount, paid, settled);
         userExpenses.add(userExpense);
         user.getUserExpenses().add(userExpense);
     }
