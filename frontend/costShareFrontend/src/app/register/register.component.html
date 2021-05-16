@@ -60,13 +60,12 @@
         <mat-error> Please provide a valid password</mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary">Create account</button>
-      <p>
-        Already have an account?
-        <a routerLink="/login" routerLinkActive="active">Log in</a>
-      </p>
     </form>
   </mat-card-content>
-
+  <p>
+    Already have an account?
+    <a routerLink="/login" routerLinkActive="active">Log in</a>
+  </p>
   <div class="alert alert-success" *ngIf="isSuccessful">
     Your registration is successful!
   </div>

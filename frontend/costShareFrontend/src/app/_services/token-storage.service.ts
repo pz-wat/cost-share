@@ -1,3 +1,4 @@
+import { JsonpClientBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -13,6 +14,7 @@ export class TokenStorageService {
 
   public saveToken(token: string): void {
     window.sessionStorage.removeItem(TOKEN_KEY);
+
     window.sessionStorage.setItem(TOKEN_KEY, token);
   }
 
@@ -24,15 +26,21 @@ export class TokenStorageService {
     return 'no item';
   }
 
-  public saveUser(user: any): void {
+  public saveUser(token: any): void {
     window.sessionStorage.removeItem(USER_KEY);
-    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    let userInfo = {
+      username: token.username,
+      email: token.email,
+      id: token.id,
+    };
+
+    window.sessionStorage.setItem(USER_KEY, JSON.stringify(userInfo));
   }
 
   public getUser(): any {
-    const item = sessionStorage.getItem(TOKEN_KEY);
+    const item = sessionStorage.getItem(USER_KEY);
     if (item) {
-      return JSON.parse(item);
+      return JSON.stringify(item);
     }
     return 'no item';
   }

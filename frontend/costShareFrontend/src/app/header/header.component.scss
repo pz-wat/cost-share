@@ -12,15 +12,28 @@
   margin-left: 0;
   cursor: pointer;
 }
-.sign-out {
-  color: #d0d0d0;
+.user {
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 1em;
+}
+
+a {
+  height: 100%;
+  text-decoration: none;
+  margin-left: 1em;
+  color: #d0d0d0;
   cursor: pointer;
 }
-.sign-out:hover {
+a:hover {
   color: #ffffff;
+}
+img {
+  width: 2em;
+  height: 2em;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
 }
 button {
   width: 7rem;

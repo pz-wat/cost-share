@@ -1,0 +1,38 @@
+<div class="container">
+  <mat-expansion-panel class="add-group">
+    <mat-expansion-panel-header>
+      <mat-panel-title> Add Group </mat-panel-title>
+    </mat-expansion-panel-header>
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <mat-form-field class="full-width-input">
+        <input
+          matInput
+          placeholder="Group name"
+          type="text"
+          class="form-control"
+          name="groupName"
+          [(ngModel)]="form.groupName"
+          required
+          #username="ngModel"
+        />
+        <mat-error> Please provide a valid username </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary">Add group</button>
+    </form>
+  </mat-expansion-panel>
+
+  <div class="group-previews">
+    <div class="groups" *ngFor="let group of groups">
+      <h2>{{ group.name }}</h2>
+      <p>{{ group.id }}</p>
+      <p>{{ group.accessCode }}</p>
+      <p>{{ group.isUserAdmin }}</p>
+      <p>{{ group.date }}</p>
+    </div>
+  </div>
+</div>

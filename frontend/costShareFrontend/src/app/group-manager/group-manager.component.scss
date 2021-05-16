@@ -1,0 +1,28 @@
+.container {
+  padding: 1em;
+}
+mat-expansion-panel {
+  width: 20em;
+}
+.group-previews {
+  display: flex;
+  flex-wrap: wrap;
+}
+.groups {
+  padding: 1em;
+  margin-top: 1em;
+  background-color: white;
+  border-radius: 0.2em;
+  color: black;
+  width: 18em;
+  margin-right: 1em;
+}
+.groups p {
+  margin: auto;
+}
+.groups h2 {
+  text-align: center;
+}
+form * {
+  padding-right: 1em;
+}

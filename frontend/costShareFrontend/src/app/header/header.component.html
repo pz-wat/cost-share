@@ -20,5 +20,18 @@
       Register
     </button>
   </div>
-  <a class="sign-out" (click)="signOut()" *ngIf="isLoggedIn">Sign Out</a>
+  <div class="user">
+    <a class="user" *ngIf="isLoggedIn">User profile</a>
+    <a class="user" *ngIf="isLoggedIn" routerLink="/groups">Manage groups</a>
+  </div>
+  <img
+    *ngIf="isLoggedIn"
+    id="profile-img"
+    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+    class="profile-img-card user"
+  />
+  <span class="user">
+    {{ this.username }}
+  </span>
+  <a class="sign-out user" (click)="signOut()" *ngIf="isLoggedIn">Sign Out</a>
 </div>

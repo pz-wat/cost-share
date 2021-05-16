@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { MainSectionComponent } from './main-section/main-section.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LandingPageComponent } from './landing-page/landing-page.component';
@@ -25,6 +26,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProfileComponent } from './profile/profile.component';
 import { authInterceptorProviders } from './auth.interceptor';
 import { HttpClientModule } from '@angular/common/http';
+import { GroupManagerComponent } from './group-manager/group-manager.component';
+
+import { GroupComponent } from './group/group.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +39,9 @@ import { HttpClientModule } from '@angular/common/http';
     LoginPageComponent,
     RegisterComponent,
     ProfileComponent,
+    GroupManagerComponent,
+
+    GroupComponent,
   ],
   imports: [
     HttpClientModule,
@@ -60,6 +68,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatSelectModule,
     MatOptionModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
+    MatGridListModule,
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
