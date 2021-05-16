@@ -37,7 +37,25 @@ public class Expense {
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
-    @OneToMany(mappedBy = "expense")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "expense")
     private Set<UserExpense> userExpenses = new HashSet<>();
 
+    public void addGroup(Group group) {
+        this.setGroup(group);
+        group.getExpenses().add(this);
+    }
+
+    public void addOwner(User user) {
+        addUser(user, new BigDecimal("0.0"),true, true);
+    }
+
+    public void addBorrowers(Set<User> borrowers, BigDecimal owedAmount) {
+        borrowers.forEach(borrower -> addUser(borrower, owedAmount, false, false));
+    }
+
+    private void addUser(User user, BigDecimal owedAmount, boolean paid, boolean settled) {
+        UserExpense userExpense = new UserExpense(user, this, owedAmount, paid, settled);
+        userExpenses.add(userExpense);
+        user.getUserExpenses().add(userExpense);
+    }
 }

@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS roles (
 CREATE TABLE IF NOT EXISTS user_roles (
   user_id BIGINT NOT NULL,
   role_id INT NOT NULL,
-  PRIMARY KEY(user_id, role_id)
+  PRIMARY KEY(user_id, role_id),
+  CONSTRAINT fk_user_rol FOREIGN KEY (user_id) REFERENCES users (id),
+  CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles (id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS cost_group (
@@ -47,6 +49,7 @@ CREATE TABLE IF NOT EXISTS user_group (
 CREATE TABLE IF NOT EXISTS user_expense (
   user_id BIGINT NOT NULL,
   expense_id BIGINT NOT NULL,
+  owed_amount DECIMAL(13,2) NULL DEFAULT NULL,
   paid BIT(1) DEFAULT 0,
   settled BIT(1) DEFAULT 0,
   PRIMARY KEY(user_id, expense_id),
