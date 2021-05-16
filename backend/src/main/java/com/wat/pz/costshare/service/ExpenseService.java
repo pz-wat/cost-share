@@ -15,4 +15,6 @@ public interface ExpenseService {
     List<ExpenseResponseDto> findAllExpensesByGroupAndUserId(Long groupId, Long userId);
 
     void settleUser(Long expenseId, Long userId);
+
+    void deleteExpense(Long expenseId);
 }

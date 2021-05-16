@@ -145,4 +145,12 @@ public class ExpenseServiceImpl implements ExpenseService {
                 expense.getDateCreated(), expense.getGroup().getId(), expenseUsers);
     }
 
+    @Override
+    @Transactional
+    public void deleteExpense(Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Error: Expense with the provided id does not exist!"));
+        expenseRepository.delete(expense);
+    }
+
 }
