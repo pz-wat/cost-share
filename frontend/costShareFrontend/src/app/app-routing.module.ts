@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { RegisterComponent } from './register/register.component';
+import { GroupManagerComponent } from './group-manager/group-manager.component';
 
 const routes: Routes = [
   { path: 'home', component: LandingPageComponent },
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'groups', component: GroupManagerComponent },
 ];
 
 @NgModule({

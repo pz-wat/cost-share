@@ -1,6 +1,7 @@
 <mat-card>
-  <mat-card-content
-    ><h2>Log In</h2>
+  <mat-card-content>
+    <h2 *ngIf="!isLoggedIn">Log In</h2>
+    <h2 *ngIf="isLoggedIn">You're already Logged In!</h2>
     <img
       id="profile-img"
       src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -16,7 +17,7 @@
       <mat-form-field class="full-width-input">
         <input
           matInput
-          placeholder="Email"
+          placeholder="Username"
           type="text"
           class="form-control"
           name="username"
@@ -24,7 +25,7 @@
           required
           #username="ngModel"
         />
-        <mat-error> Please provide a valid email address </mat-error>
+        <mat-error> Please provide a valid username </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width-input">
         <input
@@ -43,11 +44,11 @@
       <button mat-raised-button color="primary">Log in</button>
     </form>
   </mat-card-content>
-  <p>
+  <p *ngIf="!isLoggedIn">
     Don't have an account?
     <a routerLink="/register" routerLinkActive="active">Register</a>
   </p>
   <div class="alert alert-success" *ngIf="isLoggedIn">
-    Logged in as {{ user }}.
+    Logged in as : {{ this.user }}.
   </div>
 </mat-card>
