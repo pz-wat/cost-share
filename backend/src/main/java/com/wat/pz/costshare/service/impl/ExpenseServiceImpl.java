@@ -70,6 +70,29 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     @Transactional
+    public List<ExpenseResponseDto> findAllExpensesByGroupAndUserId(Long groupId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
+
+        List<ExpenseResponseDto> expenses = new ArrayList<>();
+        group.getExpenses().forEach(expense -> {
+            List<ExpenseUser> expenseUsers = new ArrayList<>();
+            expense.getUserExpenses().stream()
+                    .filter(userExpense -> userExpense.getUser().getId().equals(user.getId()))
+                    .forEach(userExpense -> expenseUsers.add(new ExpenseUser(userExpense.getUser().getId(),
+                            userExpense.getUser().getUsername(), userExpense.getOwedAmount(),
+                            userExpense.isPaid(), userExpense.isSettled())));
+            expenses.add(new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
+                    expense.getDateCreated(), expense.getGroup().getId(), expenseUsers));
+        });
+
+        return expenses;
+    }
+
+    @Override
+    @Transactional
     public ExpenseResponseDto createExpense(Long userId, Long groupId, ExpensePostRequestDto expenseDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));

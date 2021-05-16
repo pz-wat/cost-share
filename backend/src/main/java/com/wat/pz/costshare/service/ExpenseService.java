@@ -11,4 +11,6 @@ public interface ExpenseService {
     ExpenseResponseDto findExpenseById(Long expenseId);
 
     List<ExpenseResponseDto> findAllExpensesByGroupId(Long groupId);
+
+    List<ExpenseResponseDto> findAllExpensesByGroupAndUserId(Long groupId, Long userId);
 }

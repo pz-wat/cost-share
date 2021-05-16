@@ -31,8 +31,9 @@ public class ExpenseController {
     }
 
     @GetMapping("/group/{groupId}/user/{userId}/expense")
-    public ResponseEntity<?> getGroupUserExpenses(@PathVariable Long groupId, @PathVariable Long userId) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<List<ExpenseResponseDto>> getGroupUserExpenses(@PathVariable Long groupId,
+                                                                         @PathVariable Long userId) {
+        return new ResponseEntity<>(expenseService.findAllExpensesByGroupAndUserId(groupId, userId), HttpStatus.OK);
     }
 
     @PostMapping("/group/{groupId}/user/{userId}/expense")
