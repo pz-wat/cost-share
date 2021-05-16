@@ -2,6 +2,7 @@ package com.wat.pz.costshare.controller;
 
 import com.wat.pz.costshare.dto.request.ExpensePostRequestDto;
 import com.wat.pz.costshare.dto.response.ExpenseResponseDto;
+import com.wat.pz.costshare.dto.response.MessageResponse;
 import com.wat.pz.costshare.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -48,8 +49,9 @@ public class ExpenseController {
     }
 
     @PutMapping("/expense/{expenseId}/user/{userId}/settle")
-    public ResponseEntity<?> settleUser(@PathVariable Long expenseId, @PathVariable Long userId) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<MessageResponse> settleUser(@PathVariable Long expenseId, @PathVariable Long userId) {
+        expenseService.settleUser(expenseId, userId);
+        return new ResponseEntity<>(new MessageResponse("User with provided id settled successfully"), HttpStatus.OK);
     }
 
     @DeleteMapping("/expense/{expenseId}")

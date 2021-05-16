@@ -6,7 +6,6 @@ import com.wat.pz.costshare.dto.response.ExpenseUser;
 import com.wat.pz.costshare.entity.Expense;
 import com.wat.pz.costshare.entity.Group;
 import com.wat.pz.costshare.entity.User;
-import com.wat.pz.costshare.entity.UserExpense;
 import com.wat.pz.costshare.repository.ExpenseRepository;
 import com.wat.pz.costshare.repository.GroupRepository;
 import com.wat.pz.costshare.repository.UserRepository;
@@ -89,6 +88,20 @@ public class ExpenseServiceImpl implements ExpenseService {
         });
 
         return expenses;
+    }
+
+    @Override
+    @Transactional
+    public void settleUser(Long expenseId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Error: Expense with the provided id does not exist!"));
+
+        expense.getUserExpenses().stream()
+                .filter(userExpense -> userExpense.getUser().getId().equals(user.getId()))
+                .forEach(userExpense -> userExpense.setSettled(true));
+        expenseRepository.save(expense);
     }
 
     @Override
