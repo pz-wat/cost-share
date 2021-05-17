@@ -106,7 +106,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     @Transactional
-    public ExpenseResponseDto createExpense(Long userId, Long groupId, ExpensePostRequestDto expenseDto) {
+    public ExpenseResponseDto createExpense(Long groupId, Long userId, ExpensePostRequestDto expenseDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)

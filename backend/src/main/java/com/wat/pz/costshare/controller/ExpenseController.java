@@ -31,7 +31,7 @@ public class ExpenseController {
         return new ResponseEntity<>(expenseService.findAllExpensesByGroupId(groupId), HttpStatus.OK);
     }
 
-    @GetMapping("/group/{groupId}/user/{userId}/expense")
+    @GetMapping("/group/{groupId}/user/{userId}/expense")//sth wrong
     public ResponseEntity<List<ExpenseResponseDto>> getGroupUserExpenses(@PathVariable Long groupId,
                                                                          @PathVariable Long userId) {
         return new ResponseEntity<>(expenseService.findAllExpensesByGroupAndUserId(groupId, userId), HttpStatus.OK);
