@@ -1,8 +1,15 @@
 <div class="container">
-  <mat-expansion-panel class="add-group">
-    <mat-expansion-panel-header>
-      <mat-panel-title> Add Group </mat-panel-title>
-    </mat-expansion-panel-header>
+  <div class="title">
+    <h1>Groups:</h1>
+    <button (click)="addGroupToggle()" mat-button>Add Group</button>
+    <button (click)="joinGroupToggle()" mat-button>Join Group</button>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h1>Add Group</h1>
+      <button (click)="addGroupToggle()" mat-button>&times;</button>
+    </div>
     <form
       name="form"
       (ngSubmit)="f.form.valid && onSubmit()"
@@ -20,19 +27,51 @@
           required
           #username="ngModel"
         />
-        <mat-error> Please provide a valid username </mat-error>
+        <mat-error> Please provide a name for the new group</mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary">Add group</button>
+
+      <button (click)="addGroupToggle()" mat-raised-button color="primary">
+        Add group
+      </button>
     </form>
-  </mat-expansion-panel>
+  </div>
+
+  <div class="modal" id="join-group">
+    <div class="modal-header">
+      <h1>Join Group</h1>
+      <button (click)="joinGroupToggle()" mat-button>&times;</button>
+    </div>
+    <form name="joinGroupForm" (ngSubmit)="joinGroup()" #f="ngForm" novalidate>
+      <mat-form-field class="full-width-input">
+        <input
+          matInput
+          placeholder="Group access code"
+          type="text"
+          class="form-control"
+          name="accessCode"
+          [(ngModel)]="joinGroupForm.accessCode"
+          required
+          #username="ngModel"
+        />
+        <mat-error> Please provide an accessCode </mat-error>
+      </mat-form-field>
+      <button (click)="joinGroupToggle()" mat-raised-button color="primary">
+        Join group
+      </button>
+    </form>
+  </div>
+
+  <div id="overlay"></div>
 
   <div class="group-previews">
     <div class="groups" *ngFor="let group of groups">
       <h2>{{ group.name }}</h2>
-      <p>{{ group.id }}</p>
-      <p>{{ group.accessCode }}</p>
-      <p>{{ group.isUserAdmin }}</p>
-      <p>{{ group.date }}</p>
+      <p>Group access code: {{ group.accessCode }}</p>
+      <p>Users:</p>
+      <ul>
+        <li *ngFor="let user of group.groupUsers">{{ user.username }}</li>
+      </ul>
+      <p>Group created at: {{ group.date }}</p>
     </div>
   </div>
 </div>
