@@ -6,7 +6,6 @@ import com.wat.pz.costshare.dto.response.ExpenseUser;
 import com.wat.pz.costshare.entity.Expense;
 import com.wat.pz.costshare.entity.Group;
 import com.wat.pz.costshare.entity.User;
-import com.wat.pz.costshare.entity.UserExpense;
 import com.wat.pz.costshare.repository.ExpenseRepository;
 import com.wat.pz.costshare.repository.GroupRepository;
 import com.wat.pz.costshare.repository.UserRepository;
@@ -70,7 +69,44 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     @Transactional
-    public ExpenseResponseDto createExpense(Long userId, Long groupId, ExpensePostRequestDto expenseDto) {
+    public List<ExpenseResponseDto> findAllExpensesByGroupAndUserId(Long groupId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
+
+        List<ExpenseResponseDto> expenses = new ArrayList<>();
+        group.getExpenses().forEach(expense -> {
+            List<ExpenseUser> expenseUsers = new ArrayList<>();
+            expense.getUserExpenses().stream()
+                    .filter(userExpense -> userExpense.getUser().getId().equals(user.getId()))
+                    .forEach(userExpense -> expenseUsers.add(new ExpenseUser(userExpense.getUser().getId(),
+                            userExpense.getUser().getUsername(), userExpense.getOwedAmount(),
+                            userExpense.isPaid(), userExpense.isSettled())));
+            expenses.add(new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
+                    expense.getDateCreated(), expense.getGroup().getId(), expenseUsers));
+        });
+
+        return expenses;
+    }
+
+    @Override
+    @Transactional
+    public void settleUser(Long expenseId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Error: Expense with the provided id does not exist!"));
+
+        expense.getUserExpenses().stream()
+                .filter(userExpense -> userExpense.getUser().getId().equals(user.getId()))
+                .forEach(userExpense -> userExpense.setSettled(true));
+        expenseRepository.save(expense);
+    }
+
+    @Override
+    @Transactional
+    public ExpenseResponseDto createExpense(Long groupId, Long userId, ExpensePostRequestDto expenseDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)
@@ -107,6 +143,14 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
                 expense.getDateCreated(), expense.getGroup().getId(), expenseUsers);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpense(Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Error: Expense with the provided id does not exist!"));
+        expenseRepository.delete(expense);
     }
 
 }

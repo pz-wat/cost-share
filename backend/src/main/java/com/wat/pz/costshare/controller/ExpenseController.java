@@ -2,6 +2,7 @@ package com.wat.pz.costshare.controller;
 
 import com.wat.pz.costshare.dto.request.ExpensePostRequestDto;
 import com.wat.pz.costshare.dto.response.ExpenseResponseDto;
+import com.wat.pz.costshare.dto.response.MessageResponse;
 import com.wat.pz.costshare.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,10 @@ public class ExpenseController {
         return new ResponseEntity<>(expenseService.findAllExpensesByGroupId(groupId), HttpStatus.OK);
     }
 
-    @GetMapping("/group/{groupId}/user/{userId}/expense")
-    public ResponseEntity<?> getGroupUserExpenses(@PathVariable Long groupId, @PathVariable Long userId) {
-        return ResponseEntity.badRequest().build();
+    @GetMapping("/group/{groupId}/user/{userId}/expense")//sth wrong
+    public ResponseEntity<List<ExpenseResponseDto>> getGroupUserExpenses(@PathVariable Long groupId,
+                                                                         @PathVariable Long userId) {
+        return new ResponseEntity<>(expenseService.findAllExpensesByGroupAndUserId(groupId, userId), HttpStatus.OK);
     }
 
     @PostMapping("/group/{groupId}/user/{userId}/expense")
@@ -47,13 +49,15 @@ public class ExpenseController {
     }
 
     @PutMapping("/expense/{expenseId}/user/{userId}/settle")
-    public ResponseEntity<?> settleUser(@PathVariable Long expenseId, @PathVariable Long userId) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<MessageResponse> settleUser(@PathVariable Long expenseId, @PathVariable Long userId) {
+        expenseService.settleUser(expenseId, userId);
+        return new ResponseEntity<>(new MessageResponse("User with provided id settled successfully"), HttpStatus.OK);
     }
 
     @DeleteMapping("/expense/{expenseId}")
     public ResponseEntity<?> deleteExpense(@PathVariable Long expenseId) {
-        return ResponseEntity.badRequest().build();
+        expenseService.deleteExpense(expenseId);
+        return new ResponseEntity<>(new MessageResponse("Expense deleted successfully!"), HttpStatus.OK);
     }
 
 }
