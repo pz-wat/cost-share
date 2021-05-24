@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -64,6 +61,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                     expense.getDateCreated(), expense.getGroup().getId(), expenseUsers));
         });
 
+        expenses.sort(Comparator.comparing(ExpenseResponseDto::getName));
         return expenses;
     }
 
@@ -87,6 +85,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                     expense.getDateCreated(), expense.getGroup().getId(), expenseUsers));
         });
 
+        expenses.sort(Comparator.comparing(ExpenseResponseDto::getName));
         return expenses;
     }
 
