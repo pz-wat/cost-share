@@ -19,6 +19,9 @@ export class LoginPageComponent implements OnInit {
   errorMessage = '';
   user: any;
 
+  overlay = document.getElementById('overlay');
+  modal = document.getElementById('modal');
+
   ngOnInit(): void {
     if (this.tokenStorageService.getToken() != 'no item') {
       this.isLoggedIn = true;
@@ -28,9 +31,16 @@ export class LoginPageComponent implements OnInit {
       ).username;
     }
   }
+
+  modalToggle() {
+    this.overlay?.classList.toggle('active');
+    this.modal?.classList.toggle('active');
+  }
+
   onSubmit(): void {
     this.authService.login(this.form).subscribe(
       (data) => {
+        console.log(data);
         this.tokenStorageService.saveToken(data.token);
         this.tokenStorageService.saveUser(data);
 

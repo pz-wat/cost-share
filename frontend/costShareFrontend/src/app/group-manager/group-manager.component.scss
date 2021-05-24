@@ -2,6 +2,7 @@
   padding: 1em;
 }
 mat-expansion-panel {
+  margin-left: auto;
   width: 20em;
 }
 .group-previews {
@@ -10,12 +11,13 @@ mat-expansion-panel {
 }
 .groups {
   padding: 1em;
+  margin-right: 1em;
   margin-top: 1em;
+  margin-left: 1em;
   background-color: white;
   border-radius: 0.2em;
   color: black;
-  width: 18em;
-  margin-right: 1em;
+  width: calc(50% - 4em);
 }
 .groups p {
   margin: auto;
@@ -25,4 +27,71 @@ mat-expansion-panel {
 }
 form * {
   padding-right: 1em;
+}
+.title {
+  display: flex;
+  background-color: rgba(#1c2a35, 0.4);
+  padding: 1em;
+}
+.title h1 {
+  margin: auto;
+  margin-left: 0;
+}
+.container {
+  background: linear-gradient(to bottom right, #141415, black);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+
+  border-radius: 10px;
+  z-index: 10;
+  background-color: white;
+
+  width: 300px;
+  max-width: 80%;
+  padding: 1em;
+
+  form {
+    * {
+      margin: auto;
+    }
+
+    input {
+      color: black;
+    }
+  }
+}
+.modal.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+#overlay {
+  opacity: 0;
+  transition: 200ms ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(black, 0.5);
+  pointer-events: none;
+}
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal-header {
+  color: black;
+  display: flex;
+  padding-bottom: 1em;
+  * {
+    margin: auto;
+  }
+  button {
+    margin-right: 0;
+  }
 }
