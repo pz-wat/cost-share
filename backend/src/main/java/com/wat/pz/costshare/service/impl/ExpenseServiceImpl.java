@@ -74,16 +74,24 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .orElseThrow(() -> new RuntimeException("Error: Group with the provided id does not exist!"));
 
         List<ExpenseResponseDto> expenses = new ArrayList<>();
-        group.getExpenses().forEach(expense -> {
-            List<ExpenseUser> expenseUsers = new ArrayList<>();
-            expense.getUserExpenses().stream()
-                    .filter(userExpense -> userExpense.getUser().getId().equals(user.getId()))
-                    .forEach(userExpense -> expenseUsers.add(new ExpenseUser(userExpense.getUser().getId(),
-                            userExpense.getUser().getUsername(), userExpense.getOwedAmount(),
-                            userExpense.isPaid(), userExpense.isSettled())));
-            expenses.add(new ExpenseResponseDto(expense.getId(), expense.getName(), expense.getAmount(),
-                    expense.getDateCreated(), expense.getGroup().getId(), expenseUsers));
-        });
+
+        user.getUserExpenses().stream()
+                .filter(userExpense -> userExpense.getExpense().getGroup().getId().equals(group.getId())
+                        && userExpense.getUser().getId().equals(user.getId()))
+                .forEach(userExpense -> {
+                    Expense tempExpense = userExpense.getExpense();
+                    List<ExpenseUser> expenseUsers = new ArrayList<>();
+                    tempExpense.getUserExpenses().stream()
+                            .filter(ue -> ue.getExpense().getId().equals(tempExpense.getId()))
+                            .forEach(ue -> expenseUsers.add(new ExpenseUser(ue.getUser().getId(),
+                                    ue.getUser().getUsername(), ue.getOwedAmount(),
+                                    ue.isPaid(), ue.isSettled())));
+                    ExpenseResponseDto expenseResponse = 
+                            new ExpenseResponseDto(tempExpense.getId(), 
+                            tempExpense.getName(), tempExpense.getAmount(),
+                            tempExpense.getDateCreated(), tempExpense.getGroup().getId(), expenseUsers);
+                    expenses.add(expenseResponse);
+                });
 
         expenses.sort(Comparator.comparing(ExpenseResponseDto::getName));
         return expenses;
