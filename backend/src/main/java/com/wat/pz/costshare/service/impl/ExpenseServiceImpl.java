@@ -34,7 +34,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public ExpenseResponseDto findExpenseById(Long expenseId) {
         Expense expense = expenseRepository.findById(expenseId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Expense with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Expense with the provided id does not exist!"));
 
         List<ExpenseUser> expenseUsers = new ArrayList<>();
         expense.getUserExpenses()
@@ -50,7 +50,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public List<ExpenseResponseDto> findAllExpensesByGroupId(Long groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
 
         List<ExpenseResponseDto> expenses = new ArrayList<>();
         group.getExpenses().forEach(expense -> {
@@ -69,9 +69,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public List<ExpenseResponseDto> findAllExpensesByGroupAndUserId(Long groupId, Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
 
         List<ExpenseResponseDto> expenses = new ArrayList<>();
 
@@ -101,9 +101,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void settleUser(Long expenseId, Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
         Expense expense = expenseRepository.findById(expenseId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Expense with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Expense with the provided id does not exist!"));
 
         expense.getUserExpenses().stream()
                 .filter(userExpense -> userExpense.getUser().getId().equals(user.getId()))
@@ -115,9 +115,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public ExpenseResponseDto createExpense(Long groupId, Long userId, ExpensePostRequestDto expenseDto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
 
         List<ExpenseUser> expenseUsers = new ArrayList<>();
         expenseUsers
@@ -126,7 +126,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         Set<User> borrowers = new HashSet<>();
         expenseDto.getUserIds().forEach(id -> {
             User tempUser = userRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                    .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
             borrowers.add(tempUser);
         });
 
@@ -156,7 +156,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void deleteExpense(Long expenseId) {
         Expense expense = expenseRepository.findById(expenseId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Expense with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Expense with the provided id does not exist!"));
         expenseRepository.delete(expense);
     }
 

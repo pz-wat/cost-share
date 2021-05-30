@@ -35,9 +35,9 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void addUserToGroup(Long userId, Long groupId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
 
         List<UserGroup> userGroups = group.getUserGroups().stream()
                 .filter(userGroup -> userGroup.getGroup().getId().equals(group.getId()) &&
@@ -45,7 +45,7 @@ public class GroupServiceImpl implements GroupService {
                 .collect(Collectors.toList());
 
         if(!userGroups.isEmpty()) {
-            throw new IllegalArgumentException("Error: User with the provided id already belongs to the group!");
+            throw new IllegalArgumentException("User with the provided id already belongs to the group!");
         }
 
         group.addCommonUser(user);
@@ -56,9 +56,9 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponseDto findGroupById(Long userId, Long groupId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
 
         List<UserGroup> userGroups = user.getUserGroups().stream()
                 .filter(userGroup -> userGroup.getGroup().getId().equals(group.getId()))
@@ -72,7 +72,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponseDto findGroupByAccessCode(String accessCode) {
         Group group = groupRepository.findByAccessCode(accessCode)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided access code does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided access code does not exist!"));
 
         return new GroupResponseDto(group.getId(), group.getName(), group.getAccessCode(), group.getDateCreated(),
                 false, getGroupExpenses(group), getGroupUsers(group));
@@ -82,7 +82,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public List<GroupResponseDto> findAllGroupsByUserId(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
 
         List<GroupResponseDto> groups = new ArrayList<>();
         user.getUserGroups()
@@ -116,7 +116,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public GroupResponseDto createGroup(GroupPostRequestDto groupPostRequestDto) {
         User user = userRepository.findById(groupPostRequestDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
 
         Group group = new Group();
         group.setName(groupPostRequestDto.getName());
@@ -145,7 +145,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void deleteGroup(Long groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
         groupRepository.delete(group);
     }
 
@@ -153,14 +153,14 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public void deleteUserFromGroup(Long userId, Long groupId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: User with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Error: Group with the provided id does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
 
         boolean removedSuccessfully = group.removeUser(user);
 
         if(!removedSuccessfully) {
-            throw new IllegalArgumentException("Error: User with the provided id wasn't in the group");
+            throw new IllegalArgumentException("User with the provided id wasn't in the group");
         }
     }
 }

@@ -63,10 +63,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> doRegisterUser(SignupRequest signupRequest) {
         if(userRepository.existsByUsername(signupRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            throw new IllegalArgumentException("Username is already taken!");
+            //return ResponseEntity.badRequest().body(new MessageResponse("Username is already taken!"));
         }
         if(userRepository.existsByEmail(signupRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            throw new IllegalArgumentException("Email is already in use!");
+            //return ResponseEntity.badRequest().body(new MessageResponse("Email is already in use!"));
         }
 
         User user = new User();
@@ -86,17 +88,17 @@ public class UserServiceImpl implements UserService {
 
         if(stringRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role not found!"));
+                    .orElseThrow(() -> new RuntimeException("Role not found!"));
             roles.add(userRole);
         } else {
             stringRoles.forEach(role -> {
                 if ("admin".equals(role)) {
                     Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role not found."));
+                            .orElseThrow(() -> new RuntimeException("Role not found."));
                     roles.add(adminRole);
                 } else {
                     Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Error: Role not found."));
+                            .orElseThrow(() -> new RuntimeException("Role not found."));
                     roles.add(userRole);
                 }
             });
