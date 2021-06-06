@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @ControllerAdvice
 public class CostShareRestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -89,7 +90,7 @@ public class CostShareRestExceptionHandler extends ResponseEntityExceptionHandle
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(final MethodArgumentTypeMismatchException ex, final WebRequest request) {
         logger.info(ex.getClass().getName());
 
-        final String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
+        final String error = ex.getName() + " should be of type " + Objects.requireNonNull(ex.getRequiredType()).getName();
 
         final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
@@ -139,7 +140,7 @@ public class CostShareRestExceptionHandler extends ResponseEntityExceptionHandle
         final StringBuilder builder = new StringBuilder();
         builder.append(ex.getMethod());
         builder.append(" method is not supported for this request. Supported methods are ");
-        ex.getSupportedHttpMethods().forEach(t -> builder.append(t).append(" "));
+        Objects.requireNonNull(ex.getSupportedHttpMethods()).forEach(t -> builder.append(t).append(" "));
 
         final ApiError apiError = new ApiError(HttpStatus.METHOD_NOT_ALLOWED, ex.getLocalizedMessage(), builder.toString());
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());

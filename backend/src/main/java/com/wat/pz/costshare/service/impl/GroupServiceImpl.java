@@ -151,16 +151,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public void deleteUserFromGroup(Long userId, Long groupId) {
+    public void removeUserFromGroup(Long userId, Long groupId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with the provided id does not exist!"));
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Group with the provided id does not exist!"));
 
-        boolean removedSuccessfully = group.removeUser(user);
-
-        if(!removedSuccessfully) {
-            throw new IllegalArgumentException("User with the provided id wasn't in the group");
-        }
+        groupRepository.removeUserFromGroup(user.getId(), group.getId());
     }
 }
