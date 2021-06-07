@@ -123,6 +123,38 @@ Wszystkie sie tak zaczynaja: http://localhost:8080/api
    "message": "Group deleted successfully!"
 }
 ```
+#### Expenses
+
+Wszystkie sie tak zaczynaja: http://localhost:8080/api
+
+1. GET: /expense/{expenseId}
+
+- Response body:
+```
+{
+    "id": ,
+    "name": "",
+    "amount": ,
+    "dateCreated": ,
+    "groupId": ,
+    "users": [
+    {
+     "id": ,
+     "username": ,
+     "owedAmount": ,
+     "paid": ,
+     "settled": 
+     }
+    ],
+}
+```
+
+2. GET: /group/{groupId}/expense
+Lista wydatków takich jak w pkt 1. dla danej grupy od id {groupId}
+
+3. GET: /group/{groupId}/user/{userId}/expense
+Lista wydatków takich jak w pkt 1. dla danej grupy dla danego użytkonika (tych w których brał udział dla danej grupy)
+
 
 
 Jakby coś nie działało/pytania to piszcie
