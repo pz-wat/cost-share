@@ -123,6 +123,68 @@ Wszystkie sie tak zaczynaja: http://localhost:8080/api
    "message": "Group deleted successfully!"
 }
 ```
+#### Expenses
 
+Wszystkie sie tak zaczynaja: http://localhost:8080/api
 
+1. GET: /expense/{expenseId}
+- amount to ogólna kwota wydatku
+- owedAmount to już konkretna kwota jaka konkretny użytkownik jest winny
+- paid to flaga (boolean), która określa osoba, która zapłaciła za dany wydatek (czyli true = ten który stworzył wydatek i on nic nie jest winny)
+- settled to flaga (boolean), która określa czy dana osoba uregulowała dług
+
+- Response body:
+```
+{
+    "id": ,
+    "name": "",
+    "amount": ,
+    "dateCreated": ,
+    "groupId": ,
+    "users": [
+    {
+     "id": ,
+     "username": ,
+     "owedAmount": ,
+     "paid": ,
+     "settled": 
+     }
+    ]
+}
+```
+
+2. GET: /group/{groupId}/expense
+- Lista wydatków takich jak w pkt 1. dla danej grupy od id {groupId}
+
+3. GET: /group/{groupId}/user/{userId}/expense
+- Lista wydatków takich jak w pkt 1. dla danej grupy dla danego użytkonika (tych w których brał udział dla danej grupy)
+
+4. POST: /group/{groupId}/user/{userId}/expense
+- userId określa tego który tworzy wydatek czyli on płacił za coś
+
+-RequestBody (userIds to lista id osób które są winne pieniądze:
+```
+{
+    "groupId": ,
+    "name": "",
+    "amount": ,
+    "userIds": [1, 2, 3]
+}
+```
+- ResponseBody: taki jak w pkt 1. czyli nowo utworzony wydatek
+
+5. PUT: /expense/{expenseId}/user/{userId}/settle
+- Zmienia flagę settled użytkownikowi (czyli oznaczamy go jak że uregulował dług)
+- ResponseBody:
+```
+{
+   "message": "User with provided id settled successfully!"
+}
+```
+6. DELETE: /expense/{expenseId}
+```
+{
+   "message": "Expense deleted successfully!"
+}
+```
 Jakby coś nie działało/pytania to piszcie
