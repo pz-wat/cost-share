@@ -2,6 +2,7 @@ package com.wat.pz.costshare.jpa;
 
 import com.wat.pz.costshare.entity.User;
 import com.wat.pz.costshare.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class UserRepositoryIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @AfterEach
+    public void cleanUp() {
+        userRepository.deleteAll();
+    }
 
     @Test
     public void whenFindByUsername_thenReturnUser() {

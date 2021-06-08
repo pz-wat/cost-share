@@ -2,6 +2,7 @@ package com.wat.pz.costshare.jpa;
 
 import com.wat.pz.costshare.entity.Group;
 import com.wat.pz.costshare.repository.GroupRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class GroupRepositoryIntegrationTest {
 
     @Autowired
     private GroupRepository groupRepository;
+
+    @AfterEach
+    public void cleanUp() {
+        groupRepository.deleteAll();
+    }
 
     @Test
     public void whenFindByAccessCode_thenReturnGroup() {

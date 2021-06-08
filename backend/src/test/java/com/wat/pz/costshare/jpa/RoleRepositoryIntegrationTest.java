@@ -3,6 +3,7 @@ package com.wat.pz.costshare.jpa;
 import com.wat.pz.costshare.entity.Role;
 import com.wat.pz.costshare.repository.RoleRepository;
 import com.wat.pz.costshare.type.ERole;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class RoleRepositoryIntegrationTest {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @AfterEach
+    public void cleanUp() {
+        roleRepository.deleteAll();
+    }
 
     @Test
     public void whenFindByName_thenReturnRole() {
