@@ -1,0 +1,51 @@
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+
+  border-radius: 10px;
+  z-index: 10;
+  background-color: white;
+
+  width: 300px;
+  max-width: 80%;
+  padding: 1em;
+  color: black;
+}
+.modal.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+#overlay {
+  opacity: 0;
+  transition: 200ms ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(black, 0.5);
+  pointer-events: none;
+}
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal-header {
+  color: black;
+  display: flex;
+  padding-bottom: 1em;
+  * {
+    margin: auto;
+  }
+  button {
+    margin-right: 0;
+  }
+}
+form {
+  display: grid;
+}
+#container {
+  background: linear-gradient(to bottom right, #141415, black);
+}

@@ -65,7 +65,8 @@
 
   <div class="group-previews">
     <div class="groups" *ngFor="let group of groups">
-      <h2>{{ group.name }}</h2>
+      <h2 (click)="openGroup(group.accessCode)">{{ group.name }}</h2>
+      <hr />
       <p>Group access code: {{ group.accessCode }}</p>
       <p>Users:</p>
       <ul>

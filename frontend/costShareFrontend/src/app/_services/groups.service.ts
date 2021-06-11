@@ -42,4 +42,18 @@ export class GroupsService {
     var endpoint = API + '/user/' + userId + '/group/' + groupId;
     return this.http.post(endpoint, {});
   }
+  getGroupByUser(groupId: string, userId: number): Observable<any> {
+    var endpoint = API + '/user/' + userId + '/group/' + groupId;
+    return this.http.get(endpoint);
+  }
+  removeUser(groupId: string, userId: number): Observable<any> {
+    var endpoint = API + '/user/' + userId + '/group/' + groupId;
+    console.log(endpoint);
+    return this.http.delete(endpoint);
+  }
+  deleteGroup(groupId: string): Observable<any> {
+    var endpoint = API + '/group/' + groupId;
+
+    return this.http.delete(endpoint);
+  }
 }

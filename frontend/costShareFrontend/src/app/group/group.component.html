@@ -1,1 +1,98 @@
-<p>group works!</p>
+<div id="container">
+  <button (click)="changeColor()" mat-button>ChangeColor</button>
+  <div class="group-previews">
+    <h2>{{ group.name }}</h2>
+    <ul>
+      <li *ngFor="let user of group.groupUsers">
+        {{ user.username }}
+      </li>
+    </ul>
+    <p>Group created at: {{ group.date }}</p>
+  </div>
+  <button (click)="deleteGroupModal()" mat-button>Delete Group</button>
+  <button (click)="removeUserModal()" mat-button>Kick User</button>
+
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h1>Kick Users:</h1>
+    </div>
+    <ul>
+      <li *ngFor="let user of group.groupUsers">
+        {{ user.username }}
+        <button (click)="removeUser(user.id)" mat-button>&times;</button>
+      </li>
+    </ul>
+    <button (click)="removeUserModal()" mat-button>OK</button>
+  </div>
+
+  <div class="modal" id="confirmation">
+    <div class="modal-header">
+      <h1>Are you sure? This action cannot be reversed</h1>
+    </div>
+    <button (click)="deleteGroupModal()" mat-button>No</button>
+    <button (click)="deleteGroup()" mat-button>Yes</button>
+  </div>
+
+  <div id="overlay"></div>
+  <div class="expense">
+    <h1>Expenses:</h1>
+
+    <div class="expenses" *ngFor="let expense of expenses">
+      <hr />
+      <h2>{{ expense.name }}</h2>
+      <p>Expense amount: {{ expense.amount }}</p>
+      <p>Users:</p>
+      <ul>
+        <li *ngFor="let user of expense.users">
+          {{ user.username }} owes: {{ user.owedAmount }}
+        </li>
+      </ul>
+      <p>Expense from: {{ group.date }}</p>
+    </div>
+    <button (click)="addExpenseToggle()" mat-button>Add an expense</button>
+  </div>
+
+  <div class="modal" id="expense">
+    <div class="modal-header">
+      <h1>Add an expense</h1>
+      <button (click)="addExpenseToggle()" mat-button>&times;</button>
+    </div>
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <mat-form-field class="full-width-input">
+        <input
+          matInput
+          placeholder="Expense name"
+          type="text"
+          class="form-control"
+          name="expenseName"
+          [(ngModel)]="form.expenseName"
+          required
+          #username="ngModel"
+        />
+        <mat-error> Please provide a name for the expense</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width-input">
+        <input
+          matInput
+          placeholder="Amount"
+          type="text"
+          class="form-control"
+          name="amount"
+          [(ngModel)]="form.amount"
+          required
+          #username="ngModel"
+        /><mat-error> Please provide an amount</mat-error>
+      </mat-form-field>
+
+      <button (click)="addExpenseToggle()" mat-raised-button color="primary">
+        Add Expense
+      </button>
+    </form>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { asapScheduler } from 'rxjs';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { GroupsService } from '../_services/groups.service';
 import { group } from '@angular/animations';
+import { Router } from '@angular/router';
 //
 @Component({
   selector: 'app-group-manager',
@@ -11,6 +12,7 @@ import { group } from '@angular/animations';
 })
 export class GroupManagerComponent implements OnInit {
   constructor(
+    private router: Router,
     private groupsService: GroupsService,
     private tokenStorageService: TokenStorageService //public dialog: MatDialog
   ) {}
@@ -36,12 +38,14 @@ export class GroupManagerComponent implements OnInit {
     overlay?.classList.toggle('active');
     modal?.classList.toggle('active');
   }
+  openGroup(accessCode: string) {
+    this.router.navigate(['/groups', accessCode]);
+  }
 
   form: any = {};
   joinGroupForm: any = {};
 
   onSubmit() {
-    console.log('data');
     this.groupsService.createGroup(this.form.groupName).subscribe((data) => {
       this.groupsService.getUserGroups().subscribe((data) => {
         this.content = JSON.stringify(data);
@@ -64,19 +68,7 @@ export class GroupManagerComponent implements OnInit {
       });
     }, 500);
   }
-  /*openDialog() {
-    const dialogRef = this.dialog.open(AddGroupDialog);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }*/
 }
-/*@Component({
-  selector: 'add-group-dialog',
-  templateUrl: 'add-group-dialog.html',
-})
-export class AddGroupDialog {}*/
 
 interface User {
   username: string;
