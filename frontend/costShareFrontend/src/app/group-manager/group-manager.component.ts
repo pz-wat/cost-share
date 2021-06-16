@@ -67,6 +67,7 @@ export class GroupManagerComponent implements OnInit {
         console.log(data);
       });
     }, 500);
+    this.ngOnInit();
   }
 }
 

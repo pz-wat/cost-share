@@ -1,16 +1,48 @@
-<div id="container">
-  <button (click)="changeColor()" mat-button>ChangeColor</button>
-  <div class="group-previews">
-    <h2>{{ group.name }}</h2>
-    <ul>
-      <li *ngFor="let user of group.groupUsers">
-        {{ user.username }}
-      </li>
-    </ul>
-    <p>Group created at: {{ group.date }}</p>
+<div class="container">
+  <div class="title">
+    <h1>{{ group.name }}</h1>
+    <button (click)="deleteGroupModal()" mat-button>Delete Group</button>
+    <button (click)="removeUserModal()" mat-button>Kick User</button>
   </div>
-  <button (click)="deleteGroupModal()" mat-button>Delete Group</button>
-  <button (click)="removeUserModal()" mat-button>Kick User</button>
+  <!--<button (click)="changeColor()" mat-button>ChangeColor</button>-->
+  <div class="group-previews">
+    <cdk-accordion class="example-accordion">
+      <cdk-accordion-item
+        #accordionItem="cdkAccordionItem"
+        class="example-accordion-item"
+        role="button"
+        tabindex="0"
+        [attr.id]="'accordion-header-'"
+        [attr.aria-expanded]="accordionItem.expanded"
+        [attr.aria-controls]="'accordion-body-'"
+      >
+        <div
+          class="example-accordion-item-header"
+          (click)="accordionItem.toggle()"
+        >
+          Group details
+          <span class="example-accordion-item-description">
+            Click to {{ accordionItem.expanded ? "close" : "open" }}
+          </span>
+        </div>
+        <div
+          class="example-accordion-item-body"
+          role="region"
+          [style.display]="accordionItem.expanded ? '' : 'none'"
+          [attr.id]="'accordion-body-'"
+          [attr.aria-labelledby]="'accordion-header-'"
+        >
+          <h3>Users in this group</h3>
+          <ul>
+            <li *ngFor="let user of group.groupUsers">
+              {{ user.username }}
+            </li>
+          </ul>
+          <p>Group created at: {{ group.date }}</p>
+        </div>
+      </cdk-accordion-item>
+    </cdk-accordion>
+  </div>
 
   <div class="modal" id="modal">
     <div class="modal-header">
@@ -34,23 +66,94 @@
   </div>
 
   <div id="overlay"></div>
-  <div class="expense">
+  <div class="title">
     <h1>Expenses:</h1>
-
-    <div class="expenses" *ngFor="let expense of expenses">
-      <hr />
-      <h2>{{ expense.name }}</h2>
-      <p>Expense amount: {{ expense.amount }}</p>
-      <p>Users:</p>
-      <ul>
-        <li *ngFor="let user of expense.users">
-          {{ user.username }} owes: {{ user.owedAmount }}
-        </li>
-      </ul>
-      <p>Expense from: {{ group.date }}</p>
-    </div>
     <button (click)="addExpenseToggle()" mat-button>Add an expense</button>
   </div>
+
+  <!-- <div class="expense">
+    <table mat-table [dataSource]="expenses" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let element">
+          <span (click)="openExpense(element)">{{ element.name }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateCreated">
+        <th mat-header-cell *matHeaderCellDef>Created at:</th>
+        <td mat-cell *matCellDef="let element">{{ element.dateCreated }}</td>
+      </ng-container>
+      <ng-container matColumnDef="users">
+        <th mat-header-cell *matHeaderCellDef>Participants:</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngFor="let user of element.users"> {{ user.username }}, </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+-->
+  <cdk-accordion class="example-accordion">
+    <cdk-accordion-item
+      *ngFor="let expense of expenses"
+      #accordionItem="cdkAccordionItem"
+      class="example-accordion-item"
+      role="button"
+      tabindex="0"
+      [attr.id]="'accordion-header-'"
+      [attr.aria-expanded]="accordionItem.expanded"
+      [attr.aria-controls]="'accordion-body-'"
+    >
+      <div
+        class="example-accordion-item-header"
+        (click)="accordionItem.toggle()"
+      >
+        "{{ expense.name }}": {{ expense.amount }}pln
+        <span class="example-accordion-item-description">
+          Click to {{ accordionItem.expanded ? "close" : "open" }}
+        </span>
+      </div>
+      <div
+        class="example-accordion-item-body"
+        role="region"
+        [style.display]="accordionItem.expanded ? '' : 'none'"
+        [attr.id]="'accordion-body-'"
+        [attr.aria-labelledby]="'accordion-header-'"
+      >
+        <hr />
+        <h2>Users in this expense:</h2>
+        <ul>
+          <ng-container *ngFor="let user of expense.users">
+            <li>
+              {{ user.username
+              }}<span *ngIf="user.owedAmount != 0"
+                >{{ user.settled ? " owed: " : " still owes: " }}
+                {{ user.owedAmount }}</span
+              >
+              <span *ngIf="user.owedAmount == 0"> was the one that paid</span>
+              <span
+                class="settle"
+                (click)="openuser(expense, user)"
+                mat-button
+                *ngIf="!user.settled"
+              >
+                click To settle
+              </span>
+            </li></ng-container
+          >
+        </ul>
+        Expense from: {{ expense.dateCreated }}
+      </div>
+    </cdk-accordion-item>
+  </cdk-accordion>
 
   <div class="modal" id="expense">
     <div class="modal-header">
@@ -88,6 +191,19 @@
           required
           #username="ngModel"
         /><mat-error> Please provide an amount</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Users</mat-label>
+        <mat-select
+          [formControl]="users"
+          multiple
+          ([value])="(usersForExpense)"
+        >
+          <mat-option *ngFor="let user of usersInGroup" value="{{ user.id }}">
+            {{ user.username }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <button (click)="addExpenseToggle()" mat-raised-button color="primary">

@@ -51,4 +51,7 @@
   <div class="alert alert-success" *ngIf="isLoggedIn">
     Logged in as : {{ this.user }}.
   </div>
+  <div class="alert alert-success" *ngIf="isLoginFailed">
+    There was an error when trying to login!
+  </div>
 </mat-card>

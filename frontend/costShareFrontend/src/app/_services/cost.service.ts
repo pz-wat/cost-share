@@ -38,4 +38,9 @@ export class CostService {
     var endpoint = API + '/group/' + groupId + '/expense';
     return this.http.get(endpoint, httpOptions);
   }
+  settleExpense(expenseId: number, userId: number) {
+    var endpoint =
+      API + '/expense/' + expenseId + '/user/' + userId + '/settle';
+    return this.http.put(endpoint, httpOptions);
+  }
 }

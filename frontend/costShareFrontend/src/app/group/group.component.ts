@@ -4,6 +4,9 @@ import { CostService } from '../_services/cost.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { FormControl } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-group',
   templateUrl: './group.component.html',
@@ -17,6 +20,20 @@ export class GroupComponent implements OnInit {
     private costService: CostService,
     private tokenStorageService: TokenStorageService
   ) {}
+
+  id: number;
+  form: any = {};
+  group: Group;
+  usersInGroup: User[] = [];
+  usersForExpense: User[] = [];
+
+  expenses: Expense[] = [];
+  white = true;
+  users = new FormControl();
+  displayedColumns: string[] = ['name', 'amount', 'dateCreated', 'users'];
+
+  items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  expandedIndex = 0;
 
   changeColor() {
     var container = document.getElementById('container');
@@ -49,42 +66,47 @@ export class GroupComponent implements OnInit {
     modal?.classList.toggle('active');
   }
   deleteGroup() {
-    this.groupsService.deleteGroup(this.group.id).subscribe();
-    this.router.navigate(['/groups']);
+    if (this.group) {
+      this.groupsService.deleteGroup(this.group.id).subscribe();
+      this.router.navigate(['/groups']);
+    }
+  }
+  openuser(expense: Expense, user: User) {
+    this.costService.settleExpense(expense.id, user.id).subscribe((data) => {
+      var expenseIndex = this.expenses.indexOf(expense);
+      var userIndex = this.expenses[expenseIndex].users.indexOf(user);
+      this.expenses[expenseIndex].users[userIndex].settled = true;
+    });
   }
   removeUser(userId: number) {
-    console.log(userId);
-    this.groupsService
-      .getGroupByUser(this.group.id, userId)
-      .subscribe((data) => {
-        console.log(data);
-      });
-    this.groupsService.removeUser(this.group.id, userId).subscribe((data) => {
-      console.log(data);
-    });
+    if (this.group) {
+      this.groupsService
+        .getGroupByUser(this.group.id, userId)
+        .subscribe((data) => {});
+      this.groupsService
+        .removeUser(this.group.id, userId)
+        .subscribe((data) => {});
+    }
     this.ngOnInit();
   }
   onSubmit() {
-    var id = JSON.parse(JSON.parse(this.tokenStorageService.getUser())).id;
-    let userarray: number[] = [];
-    this.group.groupUsers.forEach((element) => {
-      if (id != element.id) userarray.push(element.id);
-    });
-    this.costService
-      .createExpense(
-        this.group.id,
-        this.form.expenseName,
-        this.form.amount,
-        userarray
-      )
-      .subscribe();
-    this.ngOnInit();
-  }
+    if (this.group) {
+      let userarray: number[] = [];
+      this.group.groupUsers.forEach((element) => {
+        if (this.id != element.id) userarray.push(element.id);
+      });
 
-  form: any = {};
-  group: Group;
-  expenses: Expense[] = [];
-  white = true;
+      this.costService
+        .createExpense(
+          this.group.id,
+          this.form.expenseName,
+          this.form.amount,
+          this.users.value
+        )
+        .subscribe();
+      this.ngOnInit();
+    }
+  }
 
   content: string | undefined;
   ngOnInit(): void {
@@ -93,14 +115,20 @@ export class GroupComponent implements OnInit {
       this.groupsService.getGroupByAccess(accessCode).subscribe((data) => {
         this.content = JSON.stringify(data);
         this.group = JSON.parse(this.content);
-        console.log(data);
       });
 
       setTimeout(() => {
-        this.costService.getGroupExpenses(this.group.id).subscribe((data) => {
-          this.expenses = JSON.parse(JSON.stringify(data));
-          console.log(data);
-        });
+        if (this.group) {
+          this.costService.getGroupExpenses(this.group.id).subscribe((data) => {
+            this.expenses = JSON.parse(JSON.stringify(data));
+          });
+          this.id = JSON.parse(
+            JSON.parse(this.tokenStorageService.getUser())
+          ).id;
+          this.group.groupUsers.forEach((element) => {
+            if (this.id != element.id) this.usersInGroup.push(element);
+          });
+        }
       }, 100);
     }
   }

@@ -27,9 +27,10 @@ import { ProfileComponent } from './profile/profile.component';
 import { authInterceptorProviders } from './auth.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
-
+import { MatListModule } from '@angular/material/list';
 import { GroupComponent } from './group/group.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,6 +71,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatProgressSpinnerModule,
     MatExpansionModule,
     MatGridListModule,
+    MatListModule,
+    CdkAccordionModule,
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
